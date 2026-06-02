@@ -6,6 +6,7 @@
 <title>Panificadora & Confeitaria dos Sonhos</title>
 <link rel="icon" href="https://pfst.cf2.poecdn.net/base/image/94fef12716b21e4f57e9c69f7bbd7fe145bfb3cb2300807ae9ae941ebae5f3c4?w=740&h=740&pmaid=612245339">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{
@@ -77,7 +78,7 @@ header{background:var(--brown);position:sticky;top:0;z-index:100;box-shadow:0 2p
 .promo-banner:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(0,0,0,.25)}
 .promo-banner::after{content:'';position:absolute;inset:0;background:rgba(255,255,255,.06);opacity:0;transition:opacity .2s}
 .promo-banner:hover::after{opacity:1}
-.pb-emoji{font-size:2.8rem;flex-shrink:0;filter:drop-shadow(0 2px 4px rgba(0,0,0,.2))}
+.pb-emoji{font-size:2.4rem;flex-shrink:0;width:52px;height:52px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.15);border-radius:14px;filter:drop-shadow(0 2px 4px rgba(0,0,0,.2))}
 .pb-body{flex:1;min-width:0}
 .pb-badge{background:rgba(255,255,255,.25);color:#fff;font-size:.65rem;font-weight:800;padding:2px 9px;border-radius:20px;letter-spacing:.06em;display:inline-block;margin-bottom:5px}
 .pb-title{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;line-height:1.2;margin-bottom:4px}
@@ -264,6 +265,81 @@ header{background:var(--brown);position:sticky;top:0;z-index:100;box-shadow:0 2p
   .banners-section{padding:16px 12px 0}
   .promo-banner{min-width:250px}
 }
+
+/* ── SEARCH BUTTON ── */
+.btn-search{
+  background:rgba(255,255,255,.12);
+  border:none;
+  color:#fff;
+  width:36px;height:36px;
+  border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+  font-size:.95rem;
+  transition:background .18s,transform .18s;
+  flex-shrink:0;
+  padding:0;
+}
+.btn-search:hover{background:rgba(255,255,255,.22);transform:scale(1.07)}
+.btn-search.active{background:var(--caramel)}
+.btn-search svg{pointer-events:none}
+
+/* ── SEARCH EXPAND BAR ── */
+.search-expand{
+  max-height:0;
+  overflow:hidden;
+  transition:max-height .3s cubic-bezier(.4,0,.2,1), padding .3s cubic-bezier(.4,0,.2,1);
+  background:var(--brown);
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+.search-expand.open{
+  max-height:72px;
+  padding:8px 16px 12px;
+}
+.search-inner{
+  display:flex;align-items:center;gap:10px;
+  background:rgba(255,255,255,.1);
+  border:1.5px solid rgba(255,255,255,.18);
+  border-radius:12px;
+  padding:9px 14px;
+  transition:border-color .2s;
+}
+.search-inner:focus-within{
+  border-color:var(--caramel-l);
+  background:rgba(255,255,255,.14);
+}
+.search-inner svg{color:rgba(255,255,255,.45);flex-shrink:0}
+.search-input{
+  flex:1;
+  background:transparent;
+  border:none;outline:none;
+  color:#fff;
+  font-size:.9rem;
+  font-family:'DM Sans',sans-serif;
+}
+.search-input::placeholder{color:rgba(255,255,255,.38)}
+.search-clear{
+  background:none;border:none;
+  color:rgba(255,255,255,.4);
+  cursor:pointer;font-size:1rem;
+  padding:0 2px;
+  transition:color .15s;
+  display:none;
+  flex-shrink:0;
+}
+.search-clear.vis{display:block}
+.search-clear:hover{color:#fff}
+
+/* ── SEARCH EMPTY STATE ── */
+.search-empty{
+  text-align:center;
+  padding:48px 20px;
+  display:none;
+}
+.search-empty.show{display:block}
+.search-empty svg{opacity:.3;margin-bottom:12px}
+.search-empty p{color:var(--text-l);font-size:.95rem}
+.search-empty strong{color:var(--caramel-d)}
 </style>
 </head>
 <body>
@@ -285,6 +361,9 @@ header{background:var(--brown);position:sticky;top:0;z-index:100;box-shadow:0 2p
     <div class="hdr-r">
       <span id="badge-open"  class="badge badge-open"   style="display:none">● ABERTO</span>
       <span id="badge-closed" class="badge badge-closed" style="display:none">● FECHADO</span>
+      <button class="btn-search" id="btn-search" onclick="toggleSearch()" aria-label="Buscar produtos" title="Buscar produtos">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </button>
       <button class="btn-cart" onclick="openCart()">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
         Sacola <span class="cart-n" id="cart-n">0</span>
@@ -293,7 +372,29 @@ header{background:var(--brown);position:sticky;top:0;z-index:100;box-shadow:0 2p
   </div>
 </header>
 
-<div class="announce" id="announce"></div>
+<!-- SEARCH BAR -->
+<div class="search-expand" id="search-expand">
+  <div class="search-inner">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input
+      class="search-input"
+      id="search-input"
+      type="text"
+      placeholder="Buscar produto..."
+      autocomplete="off"
+      oninput="onSearchInput(this.value)"
+    >
+    <button class="search-clear" id="search-clear" onclick="clearSearch()" aria-label="Limpar busca">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- SEARCH EMPTY STATE -->
+<div class="main search-empty" id="search-empty">
+  <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+  <p>Nenhum produto encontrado para<br><strong id="search-empty-term"></strong></p>
+</div>
 
 <div class="hero">
   <p class="hero-tag">Feito com amor desde o amanhecer</p>
@@ -314,7 +415,7 @@ header{background:var(--brown);position:sticky;top:0;z-index:100;box-shadow:0 2p
   </div>
 </div>
 
-<div class="del-bar" id="del-bar">🚚 <strong>Entrega grátis</strong> das 16h às 19h</div>
+<div class="del-bar" id="del-bar"> <strong>Entrega grátis</strong> das 16h às 19h</div>
 
 <!-- PROMO BANNERS -->
 <div class="banners-section" id="banners-section" style="display:none">
@@ -490,10 +591,15 @@ async function init(){
       sb.from('categories').select('*').order('sort_order'),
       sb.from('products').select('*').order('sort_order')
     ]);
+
+    // Erro real do Supabase (credenciais, rede, etc.)
+    if(s.error && s.error.code !== 'PGRST116') throw new Error('supabase:' + s.error.message);
+
     settings   = s.data || {};
     banners    = b.data || [];
     categories = c.data || [];
     products   = p.data || [];
+
     applySettings();
     renderBanners();
     renderCatBar();
@@ -501,12 +607,19 @@ async function init(){
     subscribeRealtime();
   } catch(e) {
     console.error(e);
-    document.getElementById('main').innerHTML = `
-      <div style="text-align:center;padding:60px 20px;color:var(--text-l)">
-        <div style="font-size:3rem;margin-bottom:12px">⚠️</div>
-        <h2 style="font-family:'Playfair Display',serif;color:var(--brown);margin-bottom:8px">Erro de conexão</h2>
-        <p>Verifique as credenciais do Supabase no código.</p>
-      </div>`;
+    // Só mostra "Erro de conexão" se for falha real de rede/Supabase
+    if(e.message && e.message.startsWith('supabase:')){
+      document.getElementById('main').innerHTML = `
+        <div style="text-align:center;padding:60px 20px;color:var(--text-l)">
+          <div style="font-size:3rem;margin-bottom:12px">⚠️</div>
+          <h2 style="font-family:'Playfair Display',serif;color:var(--brown);margin-bottom:8px">Erro de conexão</h2>
+          <p>Verifique as credenciais do Supabase no código.</p>
+        </div>`;
+    } else {
+      // Erro de JS interno — não esconde os produtos, só loga
+      console.warn('Erro interno (não é Supabase):', e);
+      renderProducts();
+    }
   } finally {
     setTimeout(()=>document.getElementById('loader').classList.add('out'), 700);
   }
@@ -525,25 +638,36 @@ function subscribeRealtime(){
 /* ═══ SETTINGS ═══ */
 function applySettings(){
   const s = settings;
+  const $ = id => document.getElementById(id); // helper seguro
+
   // open/closed
   const open = isOpen(s);
-  document.getElementById('badge-open').style.display  = open ? '' : 'none';
-  document.getElementById('badge-closed').style.display = open ? 'none' : '';
-  // hero
-  if(s.hours_open&&s.hours_close) document.getElementById('h-hours').textContent=`${s.open_days_label||'Seg–Sáb'}: ${s.hours_open} às ${s.hours_close}`;
-  if(s.address)   document.getElementById('h-addr').textContent  = s.address;
-  if(s.phone)     document.getElementById('h-phone').textContent = s.phone;
-  if(s.delivery_message) document.getElementById('del-bar').innerHTML = s.delivery_message;
+  if($('badge-open'))  $('badge-open').style.display  = open ? '' : 'none';
+  if($('badge-closed'))$('badge-closed').style.display = open ? 'none' : '';
+
+  // hero chips
+  if(s.hours_open&&s.hours_close&&$('h-hours'))
+    $('h-hours').textContent=`${s.open_days_label||'Seg–Sáb'}: ${s.hours_open} às ${s.hours_close}`;
+  if(s.address  &&$('h-addr'))  $('h-addr').textContent  = s.address;
+  if(s.phone    &&$('h-phone')) $('h-phone').textContent = s.phone;
+  if(s.delivery_message&&$('del-bar')) $('del-bar').innerHTML = s.delivery_message;
   if(s.store_name) document.title = s.store_name;
+
   // whatsapp footer
   const wn = (s.whatsapp_number||s.phone||'5591981120535').replace(/\D/g,'');
-  document.getElementById('footer-wpp').href = `https://wa.me/${wn}`;
-  // announcement
-  const ann = document.getElementById('announce');
-  if(s.announcement&&s.announcement.trim()){
-    ann.textContent = s.announcement;
-    ann.className   = `announce ${s.announcement_type||'info'} show`;
-  } else { ann.className = 'announce'; }
+  if($('footer-wpp'))  $('footer-wpp').href  = `https://wa.me/${wn}`;
+  if($('footer-wpp2')) $('footer-wpp2').href = `https://wa.me/${wn}`;
+
+  // announcement — só aplica se o elemento existir
+  const ann = $('announce');
+  if(ann){
+    if(s.announcement&&s.announcement.trim()){
+      ann.textContent = s.announcement;
+      ann.className   = `announce ${s.announcement_type||'info'} show`;
+    } else {
+      ann.className = 'announce';
+    }
+  }
 }
 
 function isOpen(s){
@@ -574,7 +698,7 @@ function renderBanners(){
   scroll.innerHTML = valid.map(b=>`
     <div class="promo-banner" style="background:${b.bg_color||'var(--caramel)'};color:${b.text_color||'#fff'}"
       onclick="${b.link_cat?`filterCat(null,'${b.link_cat}')`:''}" >
-      <div class="pb-emoji">${b.emoji||'🏷️'}</div>
+      <div class="pb-emoji"><i class="fa-solid fa-${(b.emoji||'tag').replace(/^fa-/,'')}"></i></div>
       <div class="pb-body">
         ${b.badge_label?`<span class="pb-badge">${b.badge_label}</span>`:''}
         <div class="pb-title">${b.title}</div>
@@ -601,6 +725,9 @@ function filterCat(btn, cat){
 }
 
 function renderProducts(){
+  // Se há busca ativa, re-aplica o filtro em vez de renderizar tudo
+  if(searchQuery){ applySearch(); return; }
+
   const main=document.getElementById('main');
   let html='';
   categories.forEach(cat=>{
@@ -623,7 +750,7 @@ function renderProducts(){
       const badgeCls=_hl?_hl.cls:'';
       html+=`<div class="pcard" data-cat="${p.category_id}" ${!out?`onclick="openModal(${p.id})"`:''} ${out?'style="cursor:default"':''}>
         <div class="pimg">
-          ${p.image_url?`<img src="${p.image_url}" alt="${p.name}" loading="lazy">`:`<span>${p.emoji||'🍞'}</span>`}
+          ${p.image_url?`<img src="${p.image_url}" alt="${p.name}" loading="lazy">`:`<span>${p.emoji||''}</span>`}
           ${badge?`<span class="pbadge ${badgeCls}">${badge}</span>`:''}
           ${out?'<div class="out-ov"><span class="out-tag">ESGOTADO</span></div>':''}
         </div>
@@ -681,7 +808,7 @@ function buildCarousel(p){
   const next   = document.getElementById('mo-next');
 
   if(!imgs.length){
-    slides.innerHTML = `<div class="slide"><span>${p.emoji||'🍞'}</span></div>`;
+    slides.innerHTML = `<div class="slide"><span>${p.emoji||''}</span></div>`;
     dots.innerHTML = ''; prev.style.display='none'; next.style.display='none';
   } else {
     slides.innerHTML = imgs.map(url=>`<div class="slide"><img src="${url}" alt="${p.name}" loading="lazy"></div>`).join('');
@@ -934,6 +1061,111 @@ async function sendOrder(){
   document.querySelectorAll('.popt').forEach(p=>p.classList.remove('on'));
   payVal='';
 }
+
+/* ══ SEARCH ══ */
+let searchQuery = '';
+
+function toggleSearch(){
+  const bar   = document.getElementById('search-expand');
+  const btn   = document.getElementById('btn-search');
+  const input = document.getElementById('search-input');
+  const isOpen = bar.classList.toggle('open');
+  btn.classList.toggle('active', isOpen);
+  if(isOpen){
+    setTimeout(()=>input.focus(), 290);
+  } else {
+    clearSearch();
+  }
+}
+
+function clearSearch(){
+  const input = document.getElementById('search-input');
+  input.value = '';
+  searchQuery = '';
+  document.getElementById('search-clear').classList.remove('vis');
+  renderProducts();
+  document.getElementById('search-empty').classList.remove('show');
+}
+
+function onSearchInput(val){
+  searchQuery = val.trim().toLowerCase();
+  document.getElementById('search-clear').classList.toggle('vis', val.length > 0);
+  applySearch();
+}
+
+function applySearch(){
+  const main   = document.getElementById('main');
+  const emptyEl= document.getElementById('search-empty');
+
+  if(!searchQuery){
+    emptyEl.classList.remove('show');
+    main.style.display = '';
+    renderProducts();
+    return;
+  }
+
+  const filtered = products.filter(p =>
+    p.is_active !== false && (
+      (p.name||'').toLowerCase().includes(searchQuery) ||
+      (p.description||'').toLowerCase().includes(searchQuery)
+    )
+  );
+
+  if(!filtered.length){
+    main.style.display = 'none';
+    emptyEl.classList.add('show');
+    document.getElementById('search-empty-term').textContent = '"' + searchQuery + '"';
+    return;
+  }
+
+  emptyEl.classList.remove('show');
+  main.style.display = '';
+
+  const _hlMap={
+    'promo': {label:'OFERTA DO DIA', cls:'promo'},
+    'fav':   {label:'FAVORITO',      cls:'favorito'},
+    'best':  {label:'MAIS PEDIDO',   cls:'mais_vendido'},
+  };
+
+  let html = `<div class="sec-hdr">
+    <h2 class="sec-title">Resultados</h2>
+    <div class="sec-line"></div>
+    <span style="font-size:.8rem;color:var(--text-l);white-space:nowrap;font-weight:500">${filtered.length} produto${filtered.length!==1?'s':''}</span>
+  </div><div class="grid">`;
+
+  filtered.forEach(p => {
+    const out = p.stock === 0;
+    const _hl  = _hlMap[p.highlight];
+    const badge    = _hl ? _hl.label : (p.badge || '');
+    const badgeCls = _hl ? _hl.cls   : '';
+    html += `<div class="pcard" data-cat="${p.category_id}" ${!out?`onclick="openModal(${p.id})"`:''}  ${out?'style="cursor:default"':''}>
+      <div class="pimg">
+        ${p.image_url?`<img src="${p.image_url}" alt="${p.name}" loading="lazy">`:`<span>${p.emoji||''}</span>`}
+        ${badge?`<span class="pbadge ${badgeCls}">${badge}</span>`:''}
+        ${out?'<div class="out-ov"><span class="out-tag">ESGOTADO</span></div>':''}
+      </div>
+      <div class="pinfo">
+        <div class="pname">${p.name}</div>
+        <div class="pdesc">${p.description||''}</div>
+        <div class="pfooter">
+          <div class="pprice">${p.old_price?`<s>${fp(p.old_price)}</s> `:''} ${fp(p.price)}</div>
+          <button class="btn-add" ${out?'disabled':''} onclick="event.stopPropagation();openModal(${p.id})">+</button>
+        </div>
+      </div>
+    </div>`;
+  });
+
+  html += '</div>';
+  main.innerHTML = html;
+}
+
+// Fecha busca ao pressionar ESC
+document.addEventListener('keydown', e => {
+  if(e.key === 'Escape'){
+    const bar = document.getElementById('search-expand');
+    if(bar.classList.contains('open')) toggleSearch();
+  }
+});
 
 init();
 </script>
