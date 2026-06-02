@@ -30,7 +30,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
 .ltxt{font-family:'Playfair Display',serif;color:var(--cream);font-size:1.4rem;margin-top:16px}
 .lsub{color:var(--caramel-l);font-size:.85rem;margin-top:6px}
 #logott {
-  max-width: 60px; /* ou o tamanho que quiser */
+  max-width: 73px; /* ou o tamanho que quiser */
   width: 50%;
   height: none;
 }
@@ -264,6 +264,10 @@ header{background:var(--brown);position:sticky;top:0;z-index:100;box-shadow:0 2p
   .grid{grid-template-columns:repeat(2,1fr);gap:12px}
   .banners-section{padding:16px 12px 0}
   .promo-banner{min-width:250px}
+  /* Esconde o texto do logo no mobile */
+  .logo-txt{display:none}
+  /* Badge de aberto/fechado fica menor e não sobrepõe nada */
+  .badge{font-size:.65rem;padding:3px 9px}
 }
 
 /* ── SEARCH BUTTON ── */
@@ -517,7 +521,7 @@ header{background:var(--brown);position:sticky;top:0;z-index:100;box-shadow:0 2p
   </div>
   <div class="cart-foot" id="cart-foot" style="display:none">
     <div class="cform">
-      <div class="ff"><label>Seu nome</label><input id="f-name" placeholder="Ex: Maria Silva" type="text"></div>
+      <div class="ff"><label>Seu nome</label><input id="f-name" placeholder="Ex: Maria Nilza" type="text"></div>
       <div class="ff">
         <label>CEP de entrega</label>
         <div style="display:flex;gap:8px">
