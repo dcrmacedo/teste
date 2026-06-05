@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Panificadora & Confeitaria dos Sonhos</title>
+<title>Panificadora</title>
 <link rel="icon" href="https://pfst.cf2.poecdn.net/base/image/94fef12716b21e4f57e9c69f7bbd7fe145bfb3cb2300807ae9ae941ebae5f3c4?w=740&h=740&pmaid=612245339">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -376,6 +376,9 @@ header{background:var(--brown);position:sticky;top:0;z-index:100;box-shadow:0 2p
   </div>
 </header>
 
+<!-- AVISO / ANÚNCIO -->
+<div id="announce" class="announce"></div>
+
 <!-- SEARCH BAR -->
 <div class="search-expand" id="search-expand">
   <div class="search-inner">
@@ -600,6 +603,14 @@ async function init(){
     if(s.error && s.error.code !== 'PGRST116') throw new Error('supabase:' + s.error.message);
 
     settings   = s.data || {};
+    // DEBUG: log delivery settings para diagnóstico
+    console.log('[taxa] settings carregados:', {
+      delivery_fee_enabled: settings.delivery_fee_enabled,
+      delivery_fee_free_default: settings.delivery_fee_free_default,
+      delivery_fee_value: settings.delivery_fee_value,
+      delivery_free_zones: settings.delivery_free_zones,
+      delivery_paid_zones: settings.delivery_paid_zones
+    });
     banners    = b.data || [];
     categories = c.data || [];
     products   = p.data || [];
@@ -980,20 +991,38 @@ function calcularTaxa(cepData){
   // Regras de entrega configuradas no admin (settings)
   const bairroLocal   = (cepData.bairro||'').toLowerCase();
   const cidadeLocal   = (cepData.localidade||'').toLowerCase();
-  const freeZones     = (settings.delivery_free_zones||'').toLowerCase().split(',').map(z=>z.trim()).filter(Boolean);
-  const paidZones     = (settings.delivery_paid_zones||'').toLowerCase().split(',').map(z=>z.trim()).filter(Boolean);
+  // Aceita vírgula OU quebra de linha como separador
+  const splitZones = v => (v||'').toLowerCase().split(/[,\n]/).map(z=>z.trim()).filter(Boolean);
+  const freeZones  = splitZones(settings.delivery_free_zones);
+  const paidZones  = splitZones(settings.delivery_paid_zones);
+  console.log('[taxa] calcularTaxa:', { bairroLocal, cidadeLocal, paidZones, freeZones,
+    freeDefault: settings.delivery_fee_free_default });
   const feeValue      = parseFloat(settings.delivery_fee_value) || 0;
-  const freeDefault   = settings.delivery_fee_free_default;
+  // Converte corretamente independente de ser boolean ou string "true"/"false"
+  const freeDefault = settings.delivery_fee_free_default === true ||
+                      settings.delivery_fee_free_default === 'true';
 
-  // Verifica se bairro ou cidade está na zona gratuita
-  if(freeZones.some(z => bairroLocal.includes(z) || cidadeLocal.includes(z))){
-    return { valor: 0, motivo: 'bairro com entrega grátis' };
+  // Compara zona com bairro/cidade usando palavra exata
+  // Evita falsos positivos como "outeiro" dentro de "coqueiro"
+  function zoneMatch(zona, bairro, cidade){
+    const test = (text, z) => {
+      if(!text || !z) return false;
+      if(text === z) return true;
+      const re = new RegExp('(^|[\\s,\\-\u2013/])' + z.replace(/[.*+?^${}()|[\\]\\\\]/g,'\\\\$&') + '($|[\\s,\\-\u2013/])');
+      return re.test(text);
+    };
+    return test(bairro, zona) || test(cidade, zona);
   }
-  // Verifica se está na zona paga
-  if(paidZones.some(z => bairroLocal.includes(z) || cidadeLocal.includes(z))){
+
+  // 1. Bairros com taxa SEMPRE têm prioridade (mesmo com "grátis padrão" ativo)
+  if(paidZones.some(z => zoneMatch(z, bairroLocal, cidadeLocal))){
     return { valor: feeValue, motivo: 'região com taxa' };
   }
-  // Padrão
+  // 2. Bairros com entrega grátis
+  if(freeZones.some(z => zoneMatch(z, bairroLocal, cidadeLocal))){
+    return { valor: 0, motivo: 'bairro com entrega grátis' };
+  }
+  // 3. Padrão configurado
   if(freeDefault) return { valor: 0, motivo: 'entrega grátis padrão' };
   return { valor: feeValue, motivo: 'taxa padrão' };
 }
