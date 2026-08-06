@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Panificadora</title>
+<title>Panificadora & Confeitaria dos Sonhos</title>
 <link rel="icon" href="https://pfst.cf2.poecdn.net/base/image/94fef12716b21e4f57e9c69f7bbd7fe145bfb3cb2300807ae9ae941ebae5f3c4?w=740&h=740&pmaid=612245339">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -30,7 +30,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
 .ltxt{font-family:'Playfair Display',serif;color:var(--cream);font-size:1.4rem;margin-top:16px}
 .lsub{color:var(--caramel-l);font-size:.85rem;margin-top:6px}
 #logott {
-  max-width: 73px; /* ou o tamanho que quiser */
+  max-width: 60px; /* ou o tamanho que quiser */
   width: 50%;
   height: none;
 }
@@ -264,11 +264,16 @@ header{background:var(--brown);position:sticky;top:0;z-index:100;box-shadow:0 2p
   .grid{grid-template-columns:repeat(2,1fr);gap:12px}
   .banners-section{padding:16px 12px 0}
   .promo-banner{min-width:250px}
-  /* Esconde o texto do logo no mobile */
-  .logo-txt{display:none}
-  /* Badge de aberto/fechado fica menor e não sobrepõe nada */
-  .badge{font-size:.65rem;padding:3px 9px}
 }
+
+/* ── VARIAÇÕES / SABORES ── */
+.var-section{margin-bottom:16px}
+.var-label{font-size:.75rem;font-weight:700;color:var(--text-l);text-transform:uppercase;letter-spacing:.06em;margin-bottom:9px;display:block}
+.var-chips{display:flex;flex-wrap:wrap;gap:8px}
+.var-chip{background:var(--warm);border:2px solid var(--border);border-radius:50px;padding:6px 15px;font-size:.8rem;font-weight:600;color:var(--text-l);cursor:pointer;transition:all .18s;white-space:nowrap}
+.var-chip:hover{border-color:var(--caramel-l);color:var(--brown)}
+.var-chip.on{border-color:var(--caramel);background:var(--caramel);color:#fff}
+.var-chip.out{opacity:.45;cursor:not-allowed;text-decoration:line-through}
 
 /* ── SEARCH BUTTON ── */
 .btn-search{
@@ -375,9 +380,6 @@ header{background:var(--brown);position:sticky;top:0;z-index:100;box-shadow:0 2p
     </div>
   </div>
 </header>
-
-<!-- AVISO / ANÚNCIO -->
-<div id="announce" class="announce"></div>
 
 <!-- SEARCH BAR -->
 <div class="search-expand" id="search-expand">
@@ -491,6 +493,11 @@ header{background:var(--brown);position:sticky;top:0;z-index:100;box-shadow:0 2p
       <div class="mname"  id="mo-name"></div>
       <div class="mprice" id="mo-price"></div>
       <div class="mdesc"  id="mo-desc"></div>
+      <!-- VARIAÇÕES (sabores, tamanhos, etc.) -->
+      <div class="var-section" id="mo-var-section" style="display:none">
+        <span class="var-label" id="mo-var-label">Escolha o sabor</span>
+        <div class="var-chips" id="mo-var-chips"></div>
+      </div>
       <div class="qty-row">
         <button class="qbtn" onclick="chQ(-1)">−</button>
         <span class="qn" id="mo-qty">1</span>
@@ -524,7 +531,7 @@ header{background:var(--brown);position:sticky;top:0;z-index:100;box-shadow:0 2p
   </div>
   <div class="cart-foot" id="cart-foot" style="display:none">
     <div class="cform">
-      <div class="ff"><label>Seu nome</label><input id="f-name" placeholder="Ex: Maria Nilza" type="text"></div>
+      <div class="ff"><label>Seu nome</label><input id="f-name" placeholder="Ex: Maria Silva" type="text"></div>
       <div class="ff">
         <label>CEP de entrega</label>
         <div style="display:flex;gap:8px">
@@ -603,14 +610,6 @@ async function init(){
     if(s.error && s.error.code !== 'PGRST116') throw new Error('supabase:' + s.error.message);
 
     settings   = s.data || {};
-    // DEBUG: log delivery settings para diagnóstico
-    console.log('[taxa] settings carregados:', {
-      delivery_fee_enabled: settings.delivery_fee_enabled,
-      delivery_fee_free_default: settings.delivery_fee_free_default,
-      delivery_fee_value: settings.delivery_fee_value,
-      delivery_free_zones: settings.delivery_free_zones,
-      delivery_paid_zones: settings.delivery_paid_zones
-    });
     banners    = b.data || [];
     categories = c.data || [];
     products   = p.data || [];
@@ -841,26 +840,103 @@ function goSlide(n){
 }
 function carouselNav(dir){ goSlide(carSlide + dir); }
 
+/* ═══ VARIAÇÕES ═══ */
+let curVariation = null; // { name, price_delta, stock } ou null
+
+function parseVariations(p){
+  // Tenta ler campo variations (JSON array) ou extrair do description
+  if(Array.isArray(p.variations) && p.variations.length) return p.variations;
+  if(typeof p.variations === 'string'){
+    try{ const v=JSON.parse(p.variations); if(Array.isArray(v)&&v.length) return v; }catch(_){}
+  }
+  // Fallback: tenta JSON dentro do description
+  if(typeof p.description === 'string' && p.description.trim().startsWith('[[')){
+    try{
+      const match = p.description.match(/^\[\[(.*?)\]\]/s);
+      if(match){ return JSON.parse('['+match[1]+']'); }
+    }catch(_){}
+  }
+  return [];
+}
+
+function buildVariations(p){
+  const vars = parseVariations(p);
+  const sec   = document.getElementById('mo-var-section');
+  const chips = document.getElementById('mo-var-chips');
+  const label = document.getElementById('mo-var-label');
+  curVariation = null;
+  if(!vars.length){ sec.style.display='none'; chips.innerHTML=''; return; }
+  sec.style.display='';
+  label.textContent = p.variation_label || 'Escolha o sabor';
+  chips.innerHTML = vars.map((v,i)=>{
+    const isOut = v.stock===0;
+    return `<span class="var-chip${isOut?' out':''}" data-idx="${i}"
+      onclick="${isOut?'':'selectVariation('+i+')'}">${v.name}${v.price_delta&&v.price_delta>0?' +'+fp(v.price_delta):''}</span>`;
+  }).join('');
+  // Seleciona automaticamente o primeiro disponível
+  const firstAvail = vars.findIndex(v=>v.stock!==0);
+  if(firstAvail>=0) selectVariation(firstAvail);
+}
+
+function selectVariation(idx){
+  const p = curProd;
+  const vars = parseVariations(p);
+  const v = vars[idx];
+  if(!v || v.stock===0) return;
+  curVariation = v;
+  // Atualiza chips visuais
+  document.querySelectorAll('.var-chip').forEach((c,i)=>{
+    c.classList.toggle('on', i===idx);
+  });
+  // Atualiza preço mostrado
+  const price = p.price + (v.price_delta||0);
+  document.getElementById('mo-price').textContent = fp(price);
+  document.getElementById('mo-sub').textContent   = fp(price * moQty);
+}
+
 /* ═══ MODAL ═══ */
 function openModal(id){
   const p=products.find(x=>x.id===id); if(!p||p.stock===0) return;
   curProd=p; moQty=1;
   buildCarousel(p);
+  buildVariations(p);
   document.getElementById('mo-name').textContent=p.name;
   document.getElementById('mo-price').textContent=fp(p.price);
-  document.getElementById('mo-desc').textContent=p.description||'';
+  // Se a description começa com [[...]] (variações embutidas), esconde esse trecho
+  let desc = p.description||'';
+  if(desc.trim().startsWith('[[')){
+    desc = desc.replace(/^\[\[.*?\]\]\s*/s,'');
+  }
+  document.getElementById('mo-desc').textContent=desc;
   document.getElementById('mo-qty').textContent=1;
   document.getElementById('mo-sub').textContent=fp(p.price);
   document.getElementById('mbg').classList.add('open');
   document.body.style.overflow='hidden';
 }
-function closeModal(){ document.getElementById('mbg').classList.remove('open'); document.body.style.overflow=''; }
+function closeModal(){ document.getElementById('mbg').classList.remove('open'); document.body.style.overflow=''; curVariation=null; }
 function closeMOOut(e){ if(e.target===document.getElementById('mbg')) closeModal(); }
-function chQ(d){ moQty=Math.max(1,moQty+d); document.getElementById('mo-qty').textContent=moQty; document.getElementById('mo-sub').textContent=fp(curProd.price*moQty); }
+function chQ(d){
+  moQty=Math.max(1,moQty+d);
+  document.getElementById('mo-qty').textContent=moQty;
+  const price = curProd.price + (curVariation?.price_delta||0);
+  document.getElementById('mo-sub').textContent=fp(price*moQty);
+}
 function addFromModal(){
   if(!curProd) return;
-  const ex=cart.find(i=>i.id===curProd.id);
-  if(ex) ex.qty+=moQty; else cart.push({...curProd,qty:moQty});
+  const vars = parseVariations(curProd);
+  // Se há variações e nenhuma foi selecionada, avisa
+  if(vars.length && !curVariation){
+    const label = document.getElementById('mo-var-label');
+    label.style.color='#E74C3C';
+    setTimeout(()=>label.style.color='',1200);
+    return;
+  }
+  const price  = curProd.price + (curVariation?.price_delta||0);
+  const suffix = curVariation ? ` – ${curVariation.name}` : '';
+  const key    = curProd.id + (curVariation ? '_'+curVariation.name : '');
+  const ex     = cart.find(i=>i._key===key);
+  if(ex){ ex.qty+=moQty; }
+  else{ cart.push({...curProd, _key:key, name:curProd.name+suffix, price, qty:moQty}); }
   updateCart(); closeModal(); openCart();
 }
 
@@ -991,38 +1067,20 @@ function calcularTaxa(cepData){
   // Regras de entrega configuradas no admin (settings)
   const bairroLocal   = (cepData.bairro||'').toLowerCase();
   const cidadeLocal   = (cepData.localidade||'').toLowerCase();
-  // Aceita vírgula OU quebra de linha como separador
-  const splitZones = v => (v||'').toLowerCase().split(/[,\n]/).map(z=>z.trim()).filter(Boolean);
-  const freeZones  = splitZones(settings.delivery_free_zones);
-  const paidZones  = splitZones(settings.delivery_paid_zones);
-  console.log('[taxa] calcularTaxa:', { bairroLocal, cidadeLocal, paidZones, freeZones,
-    freeDefault: settings.delivery_fee_free_default });
+  const freeZones     = (settings.delivery_free_zones||'').toLowerCase().split(',').map(z=>z.trim()).filter(Boolean);
+  const paidZones     = (settings.delivery_paid_zones||'').toLowerCase().split(',').map(z=>z.trim()).filter(Boolean);
   const feeValue      = parseFloat(settings.delivery_fee_value) || 0;
-  // Converte corretamente independente de ser boolean ou string "true"/"false"
-  const freeDefault = settings.delivery_fee_free_default === true ||
-                      settings.delivery_fee_free_default === 'true';
+  const freeDefault   = settings.delivery_fee_free_default;
 
-  // Compara zona com bairro/cidade usando palavra exata
-  // Evita falsos positivos como "outeiro" dentro de "coqueiro"
-  function zoneMatch(zona, bairro, cidade){
-    const test = (text, z) => {
-      if(!text || !z) return false;
-      if(text === z) return true;
-      const re = new RegExp('(^|[\\s,\\-\u2013/])' + z.replace(/[.*+?^${}()|[\\]\\\\]/g,'\\\\$&') + '($|[\\s,\\-\u2013/])');
-      return re.test(text);
-    };
-    return test(bairro, zona) || test(cidade, zona);
-  }
-
-  // 1. Bairros com taxa SEMPRE têm prioridade (mesmo com "grátis padrão" ativo)
-  if(paidZones.some(z => zoneMatch(z, bairroLocal, cidadeLocal))){
-    return { valor: feeValue, motivo: 'região com taxa' };
-  }
-  // 2. Bairros com entrega grátis
-  if(freeZones.some(z => zoneMatch(z, bairroLocal, cidadeLocal))){
+  // Verifica se bairro ou cidade está na zona gratuita
+  if(freeZones.some(z => bairroLocal.includes(z) || cidadeLocal.includes(z))){
     return { valor: 0, motivo: 'bairro com entrega grátis' };
   }
-  // 3. Padrão configurado
+  // Verifica se está na zona paga
+  if(paidZones.some(z => bairroLocal.includes(z) || cidadeLocal.includes(z))){
+    return { valor: feeValue, motivo: 'região com taxa' };
+  }
+  // Padrão
   if(freeDefault) return { valor: 0, motivo: 'entrega grátis padrão' };
   return { valor: feeValue, motivo: 'taxa padrão' };
 }
