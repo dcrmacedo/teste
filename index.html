@@ -200,6 +200,7 @@ header{background:var(--brown);position:sticky;top:0;z-index:100;box-shadow:0 2p
 .btnx{background:rgba(255,255,255,.15);border:none;color:#fff;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center}
 .btnx:hover{background:rgba(255,255,255,.28)}
 .cart-body{flex:1;min-height:0;overflow-y:auto;padding:14px}
+.cart-step .cart-body{flex:1}
 .citem{display:flex;gap:11px;padding:13px;background:var(--warm);border-radius:12px;margin-bottom:9px;border:1px solid var(--border)}
 .cie{font-size:34px;flex-shrink:0}
 .cii{flex:1}
@@ -235,6 +236,23 @@ header{background:var(--brown);position:sticky;top:0;z-index:100;box-shadow:0 2p
 .troco-f{display:none}
 .troco-f.show{display:flex}
 .closed-note{background:#FDECEA;color:#922B21;border:1px solid #F5B7B1;border-radius:10px;padding:9px 12px;font-size:.78rem;font-weight:600;line-height:1.45;margin-bottom:12px}
+
+/* ── CART STEPS ── */
+.cart-step{display:none;flex-direction:column;flex:1;min-height:0}
+.cart-step.on{display:flex}
+.cart-step-1-foot{padding:14px 22px 18px;border-top:1px solid var(--border);background:#fff;flex-shrink:0}
+.btn-continue{width:100%;background:var(--brown);color:#fff;border:none;padding:15px;border-radius:14px;font-family:'DM Sans',sans-serif;font-size:.97rem;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;transition:all .2s;margin-top:10px}
+.btn-continue:hover{background:var(--caramel-d);transform:translateY(-1px)}
+.btn-add-more{width:100%;background:var(--warm);color:var(--brown);border:1.5px dashed var(--border);padding:11px;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:600;cursor:pointer;margin-top:8px;transition:all .2s}
+.btn-add-more:hover{border-color:var(--caramel);color:var(--caramel-d);background:#FFF8F0}
+.cart-hdr-title{display:flex;align-items:center;gap:8px}
+.cart-hdr-back{display:none;align-items:center;gap:8px;cursor:pointer;background:none;border:none;color:#fff;font-family:'Playfair Display',serif;font-size:1.15rem;padding:0}
+.cart-hdr-back.show{display:flex}
+.cart-hdr-back svg{flex-shrink:0}
+.cart-items-label{font-size:.75rem;font-weight:700;color:var(--text-l);text-transform:uppercase;letter-spacing:.06em;margin:4px 0 10px;padding:0 2px}
+.cart-step-summary{background:var(--warm);border:1px solid var(--border);border-radius:12px;padding:10px 12px;margin-bottom:12px;font-size:.82rem}
+.cart-step-summary .cs-ln{display:flex;justify-content:space-between;gap:8px;padding:2px 0;color:var(--text)}
+.cart-step-summary .cs-tot{font-weight:800;color:var(--brown);border-top:1px solid var(--border);margin-top:4px;padding-top:6px}
 
 /* ── BARRA FIXA DA SACOLA ── */
 .cart-bar{position:fixed;left:50%;bottom:14px;transform:translate(-50%,120px);width:min(520px,calc(100% - 24px));background:var(--brown);color:#fff;border:none;border-radius:50px;padding:13px 20px;display:flex;align-items:center;justify-content:space-between;font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:700;cursor:pointer;z-index:150;box-shadow:0 8px 28px rgba(0,0,0,.35);transition:transform .3s cubic-bezier(.4,0,.2,1),background .2s}
@@ -625,7 +643,11 @@ header{background:var(--brown);position:sticky;top:0;z-index:100;box-shadow:0 2p
 <div class="cbg" id="cbg" onclick="closeCart()"></div>
 <div class="cart" id="cart-drawer">
   <div class="cart-hdr">
-    <h2 style="display:flex;align-items:center;gap:8px">
+    <button type="button" class="cart-hdr-back" id="cart-hdr-back" onclick="goCartStep(1)" aria-label="Voltar">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      Checkout
+    </button>
+    <h2 class="cart-hdr-title" id="cart-hdr-title" style="display:flex;align-items:center;gap:8px">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
       Sua Sacola
     </h2>
@@ -633,91 +655,109 @@ header{background:var(--brown);position:sticky;top:0;z-index:100;box-shadow:0 2p
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
     </button>
   </div>
-  <div class="cart-body" id="cart-body">
-    <div class="empty-cart" id="empty-cart">
-      <div class="ei">
-        <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" color="#C8813A"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+
+  <!-- STEP 1: itens + recomendações -->
+  <div class="cart-step on" id="cart-step-1">
+    <div class="cart-body" id="cart-body">
+      <div class="empty-cart" id="empty-cart">
+        <div class="ei">
+          <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" color="#C8813A"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        </div>
+        <p>Sua Sacola está vazia.<br>Adicione produtos para pedir!</p>
       </div>
-      <p>Sua Sacola está vazia.<br>Adicione produtos para pedir!</p>
+      <div class="cart-items-label" id="cart-items-label" style="display:none">Itens adicionados</div>
+      <div class="sugg" id="sugg"></div>
     </div>
-    <div class="sugg" id="sugg"></div>
-  </div>
-  <div class="cart-foot" id="cart-foot" style="display:none">
-    <div class="closed-note" id="closed-note" style="display:none">Estamos fechados agora. Você pode enviar o pedido, mas ele só será atendido quando abrirmos.</div>
-    <div class="cform">
-      <div>
-        <label class="lbl">Como você quer receber?</label>
-        <div class="pay-opts" id="otype">
-          <div class="popt on" id="ot-entrega" onclick="selOrderType('entrega')">
-            <svg class="pico" width="28" height="22" viewBox="0 0 29 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 8h3M0 11.5h3.5M2 15h2"/><rect x="5.5" y="4.5" width="8.5" height="8.5" rx="1"/><path d="M5.5 7.5H14M9.75 4.5v3"/><path d="M5 13.5h10l1.5 4.5"/><circle cx="8" cy="18.5" r="3"/><circle cx="25" cy="18.5" r="3"/><path d="M11 18.5h11"/><path d="M22 18.5l-2.5-9.5H17M19.5 9h4"/></svg>
-            Entrega
-          </div>
-          <div class="popt" id="ot-retirada" onclick="selOrderType('retirada')">
-            <svg class="pico" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1-5h16l1 5"/><path d="M3 9v11h18V9"/><path d="M3 9h18"/><path d="M9 20v-6h6v6"/></svg>
-            Retirada no balcão
-          </div>
-        </div>
-      </div>
-      <div class="ff"><label><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Seu nome</label><input id="f-name" placeholder="Ex: Maria Silva" type="text" autocomplete="name"></div>
-      <div class="ff"><label><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3.1 19.5 19.5 0 01-6-6A19.8 19.8 0 012.1 4.2 2 2 0 014.1 2h3a2 2 0 012 1.7c.1 1 .4 1.9.7 2.8a2 2 0 01-.5 2.1L8.1 9.9a16 16 0 006 6l1.3-1.3a2 2 0 012.1-.4c.9.3 1.8.6 2.8.7a2 2 0 011.7 2z"/></svg>Seu WhatsApp</label><input id="f-phone" placeholder="(91) 90000-0000" type="tel" inputmode="numeric" maxlength="15" autocomplete="tel" oninput="maskPhone(this)"></div>
-      <div class="fid" id="fid-card" style="display:none"></div>
-      <div class="cform" id="delivery-fields">
-        <div class="ff">
-          <label><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>CEP de entrega</label>
-          <div style="display:flex;gap:8px">
-            <input id="f-cep" placeholder="00000-000" type="text" inputmode="numeric" maxlength="9" oninput="maskCep(this)" style="flex:1;border:1.5px solid var(--border);border-radius:10px;padding:10px 13px;font-family:'DM Sans',sans-serif;font-size:.88rem;color:var(--text);transition:border-color .2s">
-            <button onclick="buscarCep()" style="background:var(--brown);color:#fff;border:none;padding:0 14px;border-radius:10px;cursor:pointer;font-size:.8rem;font-weight:600;white-space:nowrap;transition:background .2s" onmouseover="this.style.background='var(--caramel-d)'" onmouseout="this.style.background='var(--brown)'">Buscar</button>
-          </div>
-          <div id="cep-result" style="display:none;margin-top:6px;padding:8px 10px;background:var(--cream);border-radius:8px;border:1px solid var(--border);font-size:.78rem;color:var(--text-l)"></div>
-          <div id="cep-taxa" style="display:none;margin-top:4px;font-size:.78rem;font-weight:700;color:var(--caramel-d)"></div>
-        </div>
-        <div class="ff"><label><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><path d="M9 22V12h6v10"/></svg>Endereço completo</label><input id="f-addr" placeholder="Rua, número, complemento" type="text" autocomplete="street-address"></div>
-      </div>
-      <div>
-        <label class="lbl"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg>Pagamento</label>
-        <div class="pay-opts" id="pay-opts">
-          <div class="popt" onclick="selPay(this,'pix')">
-            <svg class="pico" width="22" height="22" viewBox="0 0 512 512" fill="currentColor"><path d="M242.4 292.5C247.8 287.1 257.1 287.1 262.5 292.5L339.1 369.1C353.7 383.7 372.1 391.6 391.6 391.6H407.3L310.7 488.2C284.3 514.6 241.7 514.6 215.3 488.2L118.5 391.6H134.3C153.7 391.6 172.1 383.7 186.8 369.1L242.4 292.5zM242.4 219.5L186.8 142.9C172.1 128.3 153.7 120.4 134.3 120.4H118.5L215.3 23.8C241.7-2.6 284.3-2.6 310.7 23.8L407.4 120.4H391.6C372.1 120.4 353.8 128.3 339.1 142.9L262.5 219.5C257.1 224.9 247.9 224.9 242.4 219.5zM112 144.4L191.4 223.8C202.1 234.5 202.1 251.5 191.4 262.2L112 341.6H63.1L16.1 294.6C-5.4 273 -5.4 239 16.1 217.4L63.1 170.4L112 144.4zM495.9 217.4L448.9 170.4H400L320.6 249.8C309.9 260.5 309.9 277.5 320.6 288.2L400 367.6H448.9L495.9 320.6C517.4 299 517.4 265 495.9 243.4V217.4z"/></svg>
-            Pix
-          </div>
-          <div class="popt" onclick="selPay(this,'dinheiro')">
-            <svg class="pico" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/></svg>
-            Dinheiro
-          </div>
-          <div class="popt" onclick="selPay(this,'debito')">
-            <svg class="pico" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-            Débito
-          </div>
-          <div class="popt" onclick="selPay(this,'credito')">
-            <svg class="pico" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/><path d="M6 15h2M10 15h4"/></svg>
-            Crédito
-          </div>
-        </div>
-      </div>
-      <div class="ff troco-f" id="troco-f"><label><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12V8a2 2 0 00-2-2H5a2 2 0 010-4h13M3 5v14a2 2 0 002 2h15a1 1 0 001-1v-4"/><path d="M18 12a2 2 0 000 4h4v-4z"/></svg>Troco para quanto?</label><input id="f-troco" placeholder="Ex: R$ 50,00" type="text" inputmode="decimal"></div>
-      <div class="ff" id="cupom-box" style="display:none"><label><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9a3 3 0 010 6v2a2 2 0 002 2h16a2 2 0 002-2v-2a3 3 0 010-6V7a2 2 0 00-2-2H4a2 2 0 00-2 2z"/><path d="M13 5v2M13 17v2M13 11v2"/></svg>Cupom de desconto</label>
-        <div class="cupom-row"><input id="f-cupom" placeholder="Digite o cupom" type="text" autocomplete="off" maxlength="20"><button type="button" onclick="aplicarCupom()">Aplicar</button></div>
-        <div class="cupom-msg" id="cupom-msg" style="display:none"></div>
-      </div>
-      <div class="ff"><label><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H6a2 2 0 00-2 2v14a2 2 0 002 2h12a2 2 0 002-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/></svg>Observações (opcional)</label><textarea id="f-obs" placeholder="Ex: bem assado, sem cebola, escrever Parabéns no bolo..." maxlength="300"></textarea></div>
-    </div>
-    <div class="cart-sticky">
-      <div class="ctotal"><span>Subtotal</span><span id="ctotal-val">R$ 0,00</span></div>
-      <div id="taxa-row" style="display:none;justify-content:space-between;align-items:center;padding:5px 0;font-size:.84rem">
-        <span style="color:var(--text-l)">Taxa de entrega</span>
-        <span id="taxa-val" style="font-weight:700;color:var(--caramel-d)">R$ 0,00</span>
-      </div>
-      <div id="desc-row" style="display:none;justify-content:space-between;align-items:center;padding:5px 0;font-size:.84rem">
-        <span style="color:var(--text-l)" id="desc-lbl">Desconto</span>
-        <span id="desc-val" style="font-weight:700;color:#1E8449">− R$ 0,00</span>
-      </div>
-      <div id="total-final-row" style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-top:1px solid var(--border);font-size:1.1rem;font-weight:800;color:var(--brown)">
-        <span>Total</span><span id="total-final-val">R$ 0,00</span>
-      </div>
-      <button class="btn-wpp" id="btn-send" onclick="sendOrder()">
-        <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M11.99 2C6.472 2 2 6.473 2 11.99c0 1.96.527 3.793 1.443 5.365L2 22l4.759-1.424A9.955 9.955 0 0011.99 22C17.507 22 22 17.527 22 11.99 22 6.474 17.507 2 11.99 2zm0 18.18c-1.703 0-3.286-.47-4.636-1.284l-.33-.198-3.44 1.029.98-3.37-.214-.345A8.165 8.165 0 013.82 11.99c0-4.512 3.671-8.18 8.17-8.18 4.502 0 8.17 3.668 8.17 8.18 0 4.51-3.668 8.19-8.17 8.19z"/></svg>
-        <span id="btn-send-txt">Finalizar pedido</span>
+    <div class="cart-step-1-foot" id="cart-step-1-foot" style="display:none">
+      <div class="ctotal" style="border-top:none;padding-top:0;margin-top:0"><span>Subtotal</span><span id="step1-sub">R$ 0,00</span></div>
+      <button type="button" class="btn-continue" onclick="goCartStep(2)">
+        Continuar
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
       </button>
+      <button type="button" class="btn-add-more" onclick="closeCart()">Adicionar mais itens</button>
+    </div>
+  </div>
+
+  <!-- STEP 2: dados + pagamento -->
+  <div class="cart-step" id="cart-step-2">
+    <div class="cart-foot" id="cart-foot" style="display:flex;flex-direction:column;flex:1;min-height:0;max-height:none;overflow-y:auto;padding:14px 22px 0">
+      <div class="cart-step-summary" id="cart-step-summary"></div>
+      <div class="closed-note" id="closed-note" style="display:none">Estamos fechados agora. Você pode enviar o pedido, mas ele só será atendido quando abrirmos.</div>
+      <div class="cform">
+        <div>
+          <label class="lbl">Como você quer receber?</label>
+          <div class="pay-opts" id="otype">
+            <div class="popt on" id="ot-entrega" onclick="selOrderType('entrega')">
+              <svg class="pico" width="28" height="22" viewBox="0 0 29 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 8h3M0 11.5h3.5M2 15h2"/><rect x="5.5" y="4.5" width="8.5" height="8.5" rx="1"/><path d="M5.5 7.5H14M9.75 4.5v3"/><path d="M5 13.5h10l1.5 4.5"/><circle cx="8" cy="18.5" r="3"/><circle cx="25" cy="18.5" r="3"/><path d="M11 18.5h11"/><path d="M22 18.5l-2.5-9.5H17M19.5 9h4"/></svg>
+              Entrega
+            </div>
+            <div class="popt" id="ot-retirada" onclick="selOrderType('retirada')">
+              <svg class="pico" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1-5h16l1 5"/><path d="M3 9v11h18V9"/><path d="M3 9h18"/><path d="M9 20v-6h6v6"/></svg>
+              Retirada no balcão
+            </div>
+          </div>
+        </div>
+        <div class="ff"><label><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Seu nome</label><input id="f-name" placeholder="Ex: Maria Silva" type="text" autocomplete="name"></div>
+        <div class="ff"><label><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3.1 19.5 19.5 0 01-6-6A19.8 19.8 0 012.1 4.2 2 2 0 014.1 2h3a2 2 0 012 1.7c.1 1 .4 1.9.7 2.8a2 2 0 01-.5 2.1L8.1 9.9a16 16 0 006 6l1.3-1.3a2 2 0 012.1-.4c.9.3 1.8.6 2.8.7a2 2 0 011.7 2z"/></svg>Seu WhatsApp</label><input id="f-phone" placeholder="(91) 90000-0000" type="tel" inputmode="numeric" maxlength="15" autocomplete="tel" oninput="maskPhone(this)"></div>
+        <div class="fid" id="fid-card" style="display:none"></div>
+        <div class="cform" id="delivery-fields">
+          <div class="ff">
+            <label><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>CEP de entrega</label>
+            <div style="display:flex;gap:8px">
+              <input id="f-cep" placeholder="00000-000" type="text" inputmode="numeric" maxlength="9" oninput="maskCep(this)" style="flex:1;border:1.5px solid var(--border);border-radius:10px;padding:10px 13px;font-family:'DM Sans',sans-serif;font-size:.88rem;color:var(--text);transition:border-color .2s">
+              <button onclick="buscarCep()" style="background:var(--brown);color:#fff;border:none;padding:0 14px;border-radius:10px;cursor:pointer;font-size:.8rem;font-weight:600;white-space:nowrap;transition:background .2s" onmouseover="this.style.background='var(--caramel-d)'" onmouseout="this.style.background='var(--brown)'">Buscar</button>
+            </div>
+            <div id="cep-result" style="display:none;margin-top:6px;padding:8px 10px;background:var(--cream);border-radius:8px;border:1px solid var(--border);font-size:.78rem;color:var(--text-l)"></div>
+            <div id="cep-taxa" style="display:none;margin-top:4px;font-size:.78rem;font-weight:700;color:var(--caramel-d)"></div>
+          </div>
+          <div class="ff"><label><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><path d="M9 22V12h6v10"/></svg>Endereço completo</label><input id="f-addr" placeholder="Rua, número, complemento" type="text" autocomplete="street-address"></div>
+        </div>
+        <div>
+          <label class="lbl"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg>Pagamento</label>
+          <div class="pay-opts" id="pay-opts">
+            <div class="popt" onclick="selPay(this,'pix')">
+              <svg class="pico" width="22" height="22" viewBox="0 0 512 512" fill="currentColor"><path d="M242.4 292.5C247.8 287.1 257.1 287.1 262.5 292.5L339.1 369.1C353.7 383.7 372.1 391.6 391.6 391.6H407.3L310.7 488.2C284.3 514.6 241.7 514.6 215.3 488.2L118.5 391.6H134.3C153.7 391.6 172.1 383.7 186.8 369.1L242.4 292.5zM242.4 219.5L186.8 142.9C172.1 128.3 153.7 120.4 134.3 120.4H118.5L215.3 23.8C241.7-2.6 284.3-2.6 310.7 23.8L407.4 120.4H391.6C372.1 120.4 353.8 128.3 339.1 142.9L262.5 219.5C257.1 224.9 247.9 224.9 242.4 219.5zM112 144.4L191.4 223.8C202.1 234.5 202.1 251.5 191.4 262.2L112 341.6H63.1L16.1 294.6C-5.4 273 -5.4 239 16.1 217.4L63.1 170.4L112 144.4zM495.9 217.4L448.9 170.4H400L320.6 249.8C309.9 260.5 309.9 277.5 320.6 288.2L400 367.6H448.9L495.9 320.6C517.4 299 517.4 265 495.9 243.4V217.4z"/></svg>
+              Pix
+            </div>
+            <div class="popt" onclick="selPay(this,'dinheiro')">
+              <svg class="pico" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/></svg>
+              Dinheiro
+            </div>
+            <div class="popt" onclick="selPay(this,'debito')">
+              <svg class="pico" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+              Débito
+            </div>
+            <div class="popt" onclick="selPay(this,'credito')">
+              <svg class="pico" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/><path d="M6 15h2M10 15h4"/></svg>
+              Crédito
+            </div>
+          </div>
+        </div>
+        <div class="ff troco-f" id="troco-f"><label><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12V8a2 2 0 00-2-2H5a2 2 0 010-4h13M3 5v14a2 2 0 002 2h15a1 1 0 001-1v-4"/><path d="M18 12a2 2 0 000 4h4v-4z"/></svg>Troco para quanto?</label><input id="f-troco" placeholder="Ex: R$ 50,00" type="text" inputmode="decimal"></div>
+        <div class="ff" id="cupom-box" style="display:none"><label><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9a3 3 0 010 6v2a2 2 0 002 2h16a2 2 0 002-2v-2a3 3 0 010-6V7a2 2 0 00-2-2H4a2 2 0 00-2 2z"/><path d="M13 5v2M13 17v2M13 11v2"/></svg>Cupom de desconto</label>
+          <div class="cupom-row"><input id="f-cupom" placeholder="Digite o cupom" type="text" autocomplete="off" maxlength="20"><button type="button" onclick="aplicarCupom()">Aplicar</button></div>
+          <div class="cupom-msg" id="cupom-msg" style="display:none"></div>
+        </div>
+        <div class="ff"><label><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H6a2 2 0 00-2 2v14a2 2 0 002 2h12a2 2 0 002-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/></svg>Observações (opcional)</label><textarea id="f-obs" placeholder="Ex: bem assado, sem cebola, escrever Parabéns no bolo..." maxlength="300"></textarea></div>
+      </div>
+      <div class="cart-sticky">
+        <div class="ctotal"><span>Subtotal</span><span id="ctotal-val">R$ 0,00</span></div>
+        <div id="taxa-row" style="display:none;justify-content:space-between;align-items:center;padding:5px 0;font-size:.84rem">
+          <span style="color:var(--text-l)">Taxa de entrega</span>
+          <span id="taxa-val" style="font-weight:700;color:var(--caramel-d)">R$ 0,00</span>
+        </div>
+        <div id="desc-row" style="display:none;justify-content:space-between;align-items:center;padding:5px 0;font-size:.84rem">
+          <span style="color:var(--text-l)" id="desc-lbl">Desconto</span>
+          <span id="desc-val" style="font-weight:700;color:#1E8449">− R$ 0,00</span>
+        </div>
+        <div id="total-final-row" style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-top:1px solid var(--border);font-size:1.1rem;font-weight:800;color:var(--brown)">
+          <span>Total</span><span id="total-final-val">R$ 0,00</span>
+        </div>
+        <button class="btn-wpp" id="btn-send" onclick="sendOrder()">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M11.99 2C6.472 2 2 6.473 2 11.99c0 1.96.527 3.793 1.443 5.365L2 22l4.759-1.424A9.955 9.955 0 0011.99 22C17.507 22 22 17.527 22 11.99 22 6.474 17.507 2 11.99 2zm0 18.18c-1.703 0-3.286-.47-4.636-1.284l-.33-.198-3.44 1.029.98-3.37-.214-.345A8.165 8.165 0 013.82 11.99c0-4.512 3.671-8.18 8.17-8.18 4.502 0 8.17 3.668 8.17 8.18 0 4.51-3.668 8.19-8.17 8.19z"/></svg>
+          <span id="btn-send-txt">Finalizar pedido</span>
+        </button>
+      </div>
     </div>
   </div>
 </div>
@@ -809,6 +849,7 @@ let categories=[], products=[], banners=[], settings={};
 let cart=[], curProd=null, moQty=1, payVal='';
 let activeCat='all';
 let orderType='entrega';
+let cartStep=1;
 let sending=false;
 let cupom=null;
 
@@ -1105,7 +1146,7 @@ function renderSugg(){
     })
     .filter(x=>x.sc>0).sort((a,b)=>b.sc-a.sc).slice(0,4);
   if(!list.length){ box.innerHTML=''; return; }
-  box.innerHTML=`<div class="sugg-t">Que tal levar também?</div><div class="sugg-row">`+list.map(({p})=>
+  box.innerHTML=`<div class="sugg-t">Peça também</div><div class="sugg-row">`+list.map(({p})=>
     `<div class="sg"><div class="sg-img"><span>${ico('bread','ph')}</span>${p.image_url?`<img src="${esc(p.image_url)}" alt="" loading="lazy" onerror="this.remove()">`:''}</div>
       <div class="sg-n">${esc(p.name)}</div>
       <div class="sg-f"><span class="sg-p">${fp(p.price)}</span><button class="btn-add" onclick="quickAdd(${p.id})" aria-label="Adicionar ${esc(p.name)}">+</button></div></div>`
@@ -1426,8 +1467,42 @@ function addFromModal(){
 }
 
 /* ═══ CART ═══ */
-function openCart(){ $('cbg').classList.add('open'); $('cart-drawer').classList.add('open'); document.body.style.overflow='hidden'; refreshOpenState(); }
-function closeCart(){ $('cbg').classList.remove('open'); $('cart-drawer').classList.remove('open'); document.body.style.overflow=''; }
+function openCart(){
+  $('cbg').classList.add('open'); $('cart-drawer').classList.add('open');
+  document.body.style.overflow='hidden';
+  goCartStep(1);
+  refreshOpenState();
+}
+function closeCart(){
+  $('cbg').classList.remove('open'); $('cart-drawer').classList.remove('open');
+  document.body.style.overflow='';
+  goCartStep(1);
+}
+function goCartStep(step){
+  cartStep = step===2 ? 2 : 1;
+  const s1=$('cart-step-1'), s2=$('cart-step-2');
+  const back=$('cart-hdr-back'), title=$('cart-hdr-title');
+  if(!s1||!s2) return;
+  s1.classList.toggle('on', cartStep===1);
+  s2.classList.toggle('on', cartStep===2);
+  if(back) back.classList.toggle('show', cartStep===2);
+  if(title) title.style.display = cartStep===2 ? 'none' : 'flex';
+  if(cartStep===2){
+    refreshOpenState();
+    updateStepSummary();
+    updateTotals();
+    // scroll form to top
+    const foot=$('cart-foot'); if(foot) foot.scrollTop=0;
+  }
+}
+function updateStepSummary(){
+  const box=$('cart-step-summary'); if(!box) return;
+  if(!cart.length){ box.innerHTML=''; return; }
+  const n=cart.reduce((a,i)=>a+i.qty,0);
+  const sub=cart.reduce((a,i)=>a+i.price*i.qty,0);
+  const lines=cart.map(i=>`<div class="cs-ln"><span>${i.qty}x ${esc(i.name)}</span><span>${fp(i.price*i.qty)}</span></div>`).join('');
+  box.innerHTML=lines+`<div class="cs-ln cs-tot"><span>${n} item${n!==1?'s':''}</span><span>${fp(sub)}</span></div>`;
+}
 
 function saveCart(){
   lsSet('pd_cart', JSON.stringify(cart.map(i=>({_key:i._key,id:i.id,name:i.name,price:i.price,qty:i.qty,_delta:i._delta||0,image_url:i.image_url,emoji:i.emoji}))));
@@ -1456,12 +1531,24 @@ function updateBar(){
 
 function updateCart(){
   const n=cart.reduce((a,i)=>a+i.qty,0);
+  const sub=cart.reduce((a,i)=>a+i.price*i.qty,0);
   $('cart-n').textContent=n;
   saveCart(); updateBar(); refreshCtls();
-  const body=$('cart-body'), foot=$('cart-foot'), emp=$('empty-cart');
+  const body=$('cart-body'), emp=$('empty-cart');
+  const foot1=$('cart-step-1-foot'), lbl=$('cart-items-label');
   Array.from(body.querySelectorAll('.citem')).forEach(e=>e.remove());
-  if(!cart.length){ emp.style.display=''; foot.style.display='none'; $('sugg').innerHTML=''; return; }
-  emp.style.display='none'; foot.style.display='';
+  if(!cart.length){
+    emp.style.display='';
+    if(foot1) foot1.style.display='none';
+    if(lbl) lbl.style.display='none';
+    $('sugg').innerHTML='';
+    if(cartStep===2) goCartStep(1);
+    return;
+  }
+  emp.style.display='none';
+  if(foot1) foot1.style.display='';
+  if(lbl) lbl.style.display='';
+  if($('step1-sub')) $('step1-sub').textContent=fp(sub);
   cart.forEach((item,idx)=>{
     const el=document.createElement('div'); el.className='citem';
     const thumb=item.image_url?`<img src="${esc(item.image_url)}" style="width:42px;height:42px;object-fit:cover;border-radius:9px;flex-shrink:0" alt="">`:`<div class="cie">${ico('bread','ph')}</div>`;
@@ -1485,6 +1572,7 @@ function updateCart(){
   });
   renderSugg();
   updateTotals();
+  if(cartStep===2) updateStepSummary();
 }
 function chCQ(idx,d){
   const it=cart[idx]; if(!it) return;
