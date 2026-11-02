@@ -43,7 +43,8 @@ header{background:var(--brown);position:sticky;top:0;z-index:100;box-shadow:0 2p
 .logo-txt{font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700;color:var(--cream);line-height:1.2}
 .logo-txt small{display:block;font-size:.68rem;font-weight:400;color:var(--caramel-l);font-family:'DM Sans',sans-serif;letter-spacing:.12em;text-transform:uppercase}
 .hdr-r{display:flex;align-items:center;gap:10px}
-.badge{padding:4px 12px;border-radius:20px;font-size:.72rem;font-weight:700;letter-spacing:.05em}
+.badge{padding:4px 12px;border-radius:20px;font-size:.72rem;font-weight:700;letter-spacing:.05em;white-space:nowrap}
+.logo{min-width:0}.logo img{flex-shrink:0}.logo-txt{min-width:0}.hdr-r{flex-shrink:0}
 .badge-open{background:#2ECC71;color:#fff;animation:glow 2s infinite}
 .badge-closed{background:#E74C3C;color:#fff}
 @keyframes glow{0%,100%{box-shadow:0 0 0 0 rgba(46,204,113,.4)}50%{box-shadow:0 0 0 7px rgba(46,204,113,0)}}
@@ -350,8 +351,12 @@ header{background:var(--brown);position:sticky;top:0;z-index:100;box-shadow:0 2p
   .footer-col{padding:0;border-left:none!important}
 }
 
+@media(max-width:440px){.cart-lbl{display:none}.btn-cart{gap:6px}}
 @media(max-width:550px){
   .hdr{padding:0 14px}
+  .hdr{gap:8px}.logo{gap:8px}.hdr-r{gap:6px}
+  .logo-txt{font-size:.95rem}.logo-txt small{font-size:.62rem;letter-spacing:.06em}
+  .badge{padding:4px 9px;font-size:.66rem}.btn-cart{padding:9px 13px}
   .hero{padding:40px 16px 34px}
   .main{padding:18px 12px 110px}
   .grid{grid-template-columns:repeat(2,1fr);gap:12px}
@@ -473,7 +478,7 @@ header{background:var(--brown);position:sticky;top:0;z-index:100;box-shadow:0 2p
   <div class="lico">
     <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" color="#8DC63F"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
   </div>
-  <div class="ltxt">HORTIFRUT E CONVENIÊNCIA</div>
+  <div class="ltxt">HORTIFRUTI E CONVENIÊNCIA</div>
   <div class="lsub">Carregando o cardápio...</div>
 </div>
 
@@ -481,7 +486,7 @@ header{background:var(--brown);position:sticky;top:0;z-index:100;box-shadow:0 2p
   <div class="hdr">
     <div class="logo" onclick="window.scrollTo(0,0)">
       <img src="https://pfst.cf2.poecdn.net/base/image/c171969701f51d504fa9fa664db40bd0db9c567d46eecb2885f08ba997762a30?w=196&h=114&pmaid=664561396" id="logott" alt="Logo">
-      <div class="logo-txt"><small id="logo-sub">HORTIFRUT E CONVENIÊNCIA</small></div>
+      <div class="logo-txt"><small id="logo-sub">HORTIFRUTI & CONVENIÊNCIA</small></div>
     </div>
     <div class="hdr-r">
       <span id="badge-open"  class="badge badge-open"   style="display:none">● ABERTO</span>
@@ -491,7 +496,7 @@ header{background:var(--brown);position:sticky;top:0;z-index:100;box-shadow:0 2p
       </button>
       <button class="btn-cart" onclick="openCart()">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-        Sacola <span class="cart-n" id="cart-n">0</span>
+        <span class="cart-lbl">Sacola</span> <span class="cart-n" id="cart-n">0</span>
       </button>
     </div>
   </div>
