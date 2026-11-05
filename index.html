@@ -4,16 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title></title>
-<link rel="icon" href="https://pfst.cf2.poecdn.net/base/image/c171969701f51d504fa9fa664db40bd0db9c567d46eecb2885f08ba997762a30?w=196&h=114&pmaid=664561396">
+<link rel="icon" href="https://pfst.cf2.poecdn.net/base/image/662a04846594862ec7fb3023cdd35ad50734f9237433aa356f1c95e11949ff53?w=253&h=321&pmaid=665577316">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{
-  --cream:#F5F8EF; --warm:#FBFCF8;
-  --caramel:#3E8E41; --caramel-d:#2D7A35; --caramel-l:#8DC63F;
-  --brown:#1B6B3C; --brown-m:#238048;
-  --text:#13281A; --text-l:#4F6352; --border:#D6E0CA;
+  --cream:#F8F5EC; --warm:#FDFBF6;
+  --caramel:#A98314; --caramel-d:#8A6A0E; --caramel-l:#E3C158;
+  --brown:#0E0E0E; --brown-m:#1E1B14;
+  --text:#1A160C; --text-l:#5E5640; --border:#E6DCC2;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -60,7 +60,7 @@ header{background:var(--brown);position:sticky;top:0;z-index:100;box-shadow:0 2p
 .announce.show{display:block}
 
 /* ── HERO ── */
-.hero{background:linear-gradient(145deg,var(--brown) 0%,#175C33 55%,var(--caramel-d) 100%);padding:56px 28px 48px;text-align:center;position:relative;overflow:hidden}
+.hero{background:linear-gradient(145deg,var(--brown) 0%,#1C1910 55%,var(--caramel-d) 100%);padding:56px 28px 48px;text-align:center;position:relative;overflow:hidden}
 .hero::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='80' height='80' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='40' cy='40' r='1.5' fill='%23fff' fill-opacity='0.04'/%3E%3C/svg%3E")}
 .hero-tag{font-size:.73rem;letter-spacing:.22em;text-transform:uppercase;color:var(--caramel-l);margin-bottom:12px;position:relative}
 .hero h1{font-family:'Playfair Display',serif;font-size:clamp(1.9rem,4.5vw,3rem);font-weight:900;color:var(--cream);line-height:1.1;margin-bottom:14px;position:relative}
@@ -103,7 +103,7 @@ header{background:var(--brown);position:sticky;top:0;z-index:100;box-shadow:0 2p
 
 /* ── PRODUCT CARD ── */
 .pcard{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.06);cursor:pointer;transition:all .22s cubic-bezier(.4,0,.2,1);border:1px solid var(--border);animation:fadeUp .4s ease both}
-.pcard:hover{transform:translateY(-4px);box-shadow:0 10px 28px rgba(27,107,60,.14);border-color:var(--caramel-l)}
+.pcard:hover{transform:translateY(-4px);box-shadow:0 10px 28px rgba(14,14,14,.14);border-color:var(--caramel-l)}
 @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
 .pcard:nth-child(1){animation-delay:.04s}.pcard:nth-child(2){animation-delay:.08s}.pcard:nth-child(3){animation-delay:.12s}.pcard:nth-child(4){animation-delay:.16s}.pcard:nth-child(5){animation-delay:.20s}.pcard:nth-child(6){animation-delay:.24s}
 .pimg{width:100%;height:162px;display:flex;align-items:center;justify-content:center;font-size:50px;background:#fff;position:relative;overflow:hidden}
@@ -112,7 +112,7 @@ header{background:var(--brown);position:sticky;top:0;z-index:100;box-shadow:0 2p
 .pbadge.promo{background:#E74C3C}
 .pbadge.favorito{background:#e0245e}
 .pbadge.mais_vendido{background:#f39c12}
-.out-ov{position:absolute;inset:0;background:rgba(6,24,14,.52);display:flex;align-items:center;justify-content:center;z-index:2}
+.out-ov{position:absolute;inset:0;background:rgba(6,5,3,.52);display:flex;align-items:center;justify-content:center;z-index:2}
 .out-tag{background:#E74C3C;color:#fff;padding:6px 16px;border-radius:20px;font-size:.73rem;font-weight:800}
 .pinfo{padding:13px 15px 15px}
 .pname{font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:700;color:var(--brown);margin-bottom:4px;line-height:1.3}
@@ -133,7 +133,7 @@ header{background:var(--brown);position:sticky;top:0;z-index:100;box-shadow:0 2p
 .cnt-bubble{position:absolute;top:-6px;right:-6px;background:var(--caramel);color:#fff;font-size:.62rem;font-weight:800;min-width:17px;height:17px;border-radius:9px;display:flex;align-items:center;justify-content:center;padding:0 4px;border:2px solid #fff}
 
 /* ── SKELETON ── */
-.skel{animation:shimmer 1.4s infinite;background:linear-gradient(90deg,#E6EEDC 25%,#F2F7EA 50%,#E6EEDC 75%);background-size:200% 100%;border-radius:6px}
+.skel{animation:shimmer 1.4s infinite;background:linear-gradient(90deg,#EFE8D4 25%,#F7F2E4 50%,#EFE8D4 75%);background-size:200% 100%;border-radius:6px}
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 .skel-card{background:#fff;border-radius:16px;overflow:hidden;border:1px solid var(--border)}
 .skel-img{height:162px}.skel-body{padding:13px 15px}.skel-ln{height:13px;margin-bottom:8px;border-radius:4px}
@@ -224,7 +224,7 @@ header{background:var(--brown);position:sticky;top:0;z-index:100;box-shadow:0 2p
 .pay-opts{display:flex;gap:7px;flex-wrap:wrap}
 .popt{flex:1;min-width:72px;background:var(--warm);border:2px solid var(--border);border-radius:10px;padding:9px 5px;text-align:center;cursor:pointer;font-size:.76rem;font-weight:600;color:var(--text-l);transition:all .2s}
 .popt:hover{border-color:var(--caramel-l)}
-.popt.on{border-color:var(--caramel);background:#EEF6E6;color:var(--caramel-d)}
+.popt.on{border-color:var(--caramel);background:#F6EFDC;color:var(--caramel-d)}
 .pico{font-size:1.3rem;display:block;margin:0 auto 3px}
 .ctotal{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-top:1px solid var(--border);margin-top:7px}
 .ctotal span:first-child{font-size:.86rem;color:var(--text-l);font-weight:500}
@@ -245,7 +245,7 @@ header{background:var(--brown);position:sticky;top:0;z-index:100;box-shadow:0 2p
 .btn-continue{width:100%;background:var(--brown);color:#fff;border:none;padding:15px;border-radius:14px;font-family:'DM Sans',sans-serif;font-size:.97rem;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;transition:all .2s;margin-top:10px}
 .btn-continue:hover{background:var(--caramel-d);transform:translateY(-1px)}
 .btn-add-more{width:100%;background:var(--warm);color:var(--brown);border:1.5px dashed var(--border);padding:11px;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:600;cursor:pointer;margin-top:8px;transition:all .2s}
-.btn-add-more:hover{border-color:var(--caramel);color:var(--caramel-d);background:#F3F8EC}
+.btn-add-more:hover{border-color:var(--caramel);color:var(--caramel-d);background:#F8F3E4}
 .cart-hdr-title{display:flex;align-items:center;gap:8px}
 .cart-hdr-back{display:none;align-items:center;gap:8px;cursor:pointer;background:none;border:none;color:#fff;font-family:'Playfair Display',serif;font-size:1.15rem;padding:0}
 .cart-hdr-back.show{display:flex}
@@ -263,7 +263,7 @@ header{background:var(--brown);position:sticky;top:0;z-index:100;box-shadow:0 2p
 .cart-bar .cb-n{background:var(--caramel);color:#fff;min-width:24px;height:24px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:.78rem;padding:0 6px}
 
 /* ── TOAST ── */
-.toast{position:fixed;left:50%;bottom:78px;transform:translate(-50%,20px);background:rgba(10,34,20,.92);color:#fff;padding:10px 18px;border-radius:50px;font-size:.84rem;font-weight:600;z-index:400;opacity:0;pointer-events:none;transition:all .25s;max-width:calc(100% - 32px);text-align:center}
+.toast{position:fixed;left:50%;bottom:78px;transform:translate(-50%,20px);background:rgba(10,9,6,.92);color:#fff;padding:10px 18px;border-radius:50px;font-size:.84rem;font-weight:600;z-index:400;opacity:0;pointer-events:none;transition:all .25s;max-width:calc(100% - 32px);text-align:center}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 
 /* ── CONFIRMAÇÃO DO PEDIDO ── */
@@ -287,7 +287,7 @@ header{background:var(--brown);position:sticky;top:0;z-index:100;box-shadow:0 2p
 .ok-close:hover{color:var(--brown)}
 
 /* ── FORNADAS / PEÇA DE NOVO / SUGESTÕES / CUPOM / COMPARTILHAR ── */
-.oven-bar{display:none;background:#0F3A20;color:#DDF0BD;padding:9px 20px;text-align:center;font-size:.84rem;font-weight:600}
+.oven-bar{display:none;background:#0E0E0E;color:#F0DC95;padding:9px 20px;text-align:center;font-size:.84rem;font-weight:600}
 .oven-bar.show{display:block}
 .oven-bar b{color:var(--caramel-l)}
 .reorder{display:flex;align-items:center;gap:14px;background:#fff;border:1.5px dashed var(--caramel);border-radius:16px;padding:14px 16px;margin-bottom:30px;flex-wrap:wrap}
@@ -329,7 +329,7 @@ header{background:var(--brown);position:sticky;top:0;z-index:100;box-shadow:0 2p
 .footer-col a:hover{color:var(--caramel-l)}
 .footer-social{display:flex;gap:10px;margin-top:4px}
 .footer-social a{display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;border:1.5px solid rgba(255,255,255,.18);color:rgba(255,255,255,.55);transition:all .2s}
-.footer-social a:hover{border-color:var(--caramel);color:var(--caramel-l);background:rgba(62,142,65,.12)}
+.footer-social a:hover{border-color:var(--caramel);color:var(--caramel-l);background:rgba(169,131,20,.12)}
 .footer-pay-imgs{display:flex;gap:5px;flex-wrap:nowrap;margin-top:4px;align-items:center;overflow:hidden}
 .footer-pay-imgs img{height:22px;width:auto;max-width:44px;object-fit:contain;background:#fff;border-radius:5px;padding:5px 5px;flex-shrink:0}
 .footer-bottom{border-top:1px solid rgba(255,255,255,.07);padding:14px 28px;text-align:center;font-size:.73rem;color:rgba(255,255,255,.3)}
@@ -447,18 +447,18 @@ header{background:var(--brown);position:sticky;top:0;z-index:100;box-shadow:0 2p
 .search-empty svg{opacity:.3;margin-bottom:12px}
 .search-empty p{color:var(--text-l);font-size:.95rem}
 .search-empty strong{color:var(--caramel-d)}
-.fid{margin:2px 0 14px;padding:10px 12px;border:1.5px dashed #3E8E41;border-radius:12px;background:rgba(62,142,65,.08);font-size:.8rem;color:var(--text-l)}
+.fid{margin:2px 0 14px;padding:10px 12px;border:1.5px dashed #A98314;border-radius:12px;background:rgba(169,131,20,.08);font-size:.8rem;color:var(--text-l)}
 .fid-t{font-weight:700;color:var(--brown)}
 .fid-d{display:flex;gap:5px;flex-wrap:wrap;margin:7px 0}
-.fid-d i{width:14px;height:14px;border-radius:50%;border:2px solid #3E8E41;display:block}
-.fid-d i.on{background:#3E8E41}
+.fid-d i{width:14px;height:14px;border-radius:50%;border:2px solid #A98314;display:block}
+.fid-d i.on{background:#A98314}
 .rv-stars{display:flex;justify-content:center;gap:2px;margin:10px 0}
-.rv-stars button{background:none;border:0;font-size:2.1rem;line-height:1;color:#C9D6BD;cursor:pointer;padding:2px}
+.rv-stars button{background:none;border:0;font-size:2.1rem;line-height:1;color:#D9CDAB;cursor:pointer;padding:2px}
 .rv-stars button.on{color:#F39C12}
-#rv-txt{width:100%;min-height:74px;border:1.5px solid #CBD9BD;border-radius:12px;padding:10px 12px;font:inherit;margin-bottom:10px;resize:vertical}
+#rv-txt{width:100%;min-height:74px;border:1.5px solid #DCCFAE;border-radius:12px;padding:10px 12px;font:inherit;margin-bottom:10px;resize:vertical}
 #h-rating{cursor:pointer}
 .ic{width:1em;height:1em;vertical-align:-.14em;flex-shrink:0}
-.ic.ph{color:#3E8E41;opacity:.55}
+.ic.ph{color:#A98314;opacity:.55}
 .rv-stars button .ic{width:1em;height:1em;vertical-align:middle}
 .ff label,.lbl{display:flex;align-items:center;gap:6px}
 .ff label .ic,.lbl .ic{width:14px;height:14px;color:var(--caramel)}
@@ -476,17 +476,17 @@ header{background:var(--brown);position:sticky;top:0;z-index:100;box-shadow:0 2p
 
 <div id="loader">
   <div class="lico">
-    <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" color="#8DC63F"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+    <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" color="#E3C158"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
   </div>
-  <div class="ltxt">HORTIFRUTI E CONVENIÊNCIA</div>
+  <div class="ltxt">GTM CONVENIÊNCIA</div>
   <div class="lsub">Carregando o cardápio...</div>
 </div>
 
 <header>
   <div class="hdr">
     <div class="logo" onclick="window.scrollTo(0,0)">
-      <img src="https://pfst.cf2.poecdn.net/base/image/c171969701f51d504fa9fa664db40bd0db9c567d46eecb2885f08ba997762a30?w=196&h=114&pmaid=664561396" id="logott" alt="Logo">
-      <div class="logo-txt"><small id="logo-sub">HORTIFRUTI & CONVENIÊNCIA</small></div>
+      <img src="https://pfst.cf2.poecdn.net/base/image/662a04846594862ec7fb3023cdd35ad50734f9237433aa356f1c95e11949ff53?w=253&h=321&pmaid=665577316" id="logott" alt="Logo">
+      <div class="logo-txt"><small id="logo-sub">GTM CONVENIÊNCIA</small></div>
     </div>
     <div class="hdr-r">
       <span id="badge-open"  class="badge badge-open"   style="display:none">● ABERTO</span>
@@ -527,8 +527,8 @@ header{background:var(--brown);position:sticky;top:0;z-index:100;box-shadow:0 2p
 </div>
 
 <div class="hero">
-  <p class="hero-tag">Frutas e Verduras Todos Os Dias</p>
-  <h1>Sabores que <em>encantam</em><br>a sua manhã</h1>
+  <p class="hero-tag">Os Melhores Produtos Todos Os Dias</p>
+  <h1>As melhores bebidas do<em> Bairro</em><br>Você encontra aqui </h1>
   <div class="hero-chips">
     <span class="chip">
       <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
@@ -579,7 +579,7 @@ header{background:var(--brown);position:sticky;top:0;z-index:100;box-shadow:0 2p
     <div class="footer-col">
       <h4><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 00-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 000-7.8z"/></svg>Redes Sociais</h4>
       <div class="footer-social">
-        <a href="#" title="Instagram" aria-label="Instagram">
+        <a href="https://www.instagram.com/gtm_conveniencia/" title="Instagram" aria-label="Instagram">
           <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
         </a>
         <a href="#" title="WhatsApp" aria-label="WhatsApp" id="footer-wpp2">
@@ -666,7 +666,7 @@ header{background:var(--brown);position:sticky;top:0;z-index:100;box-shadow:0 2p
     <div class="cart-body" id="cart-body">
       <div class="empty-cart" id="empty-cart">
         <div class="ei">
-          <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" color="#3E8E41"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+          <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" color="#A98314"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
         </div>
         <p>Sua Sacola está vazia.<br>Adicione produtos para pedir!</p>
       </div>
